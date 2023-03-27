@@ -34,3 +34,16 @@ for contour in contourslist[0:2]:
     x, y, w, h = cv2.boundingRect(contour)
     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 255), 10)
 
+
+# Show the image with the green spots identified
+width = 1360
+height = 1024
+cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
+cv2.resizeWindow("mask", width, height)
+cv2.namedWindow("img", cv2.WINDOW_NORMAL)
+cv2.resizeWindow("img", width, height)
+
+cv2.imshow('img', img)
+cv2.imshow("mask", mask)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
