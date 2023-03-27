@@ -25,3 +25,6 @@ mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 # # Find contours in the image
 contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+# convert the object tuple into a string
+contourslist  = list(contours)
+contourslist.sort(reverse=True, key= cv2.contourArea)
