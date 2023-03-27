@@ -17,3 +17,7 @@ upper_green = np.array([80, 255, 180])
 
 # Threshold the image to get only green colors
 mask = cv2.inRange(rgb, lower_green, upper_green)
+
+# # Apply morphological opening to remove small objects from the foreground
+kernel = np.ones((5,5),np.uint8)
+mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
