@@ -21,3 +21,7 @@ mask = cv2.inRange(rgb, lower_green, upper_green)
 # # Apply morphological opening to remove small objects from the foreground
 kernel = np.ones((5,5),np.uint8)
 mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+
+# # Find contours in the image
+contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
