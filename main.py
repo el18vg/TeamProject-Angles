@@ -28,3 +28,9 @@ contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX
 # convert the object tuple into a string
 contourslist  = list(contours)
 contourslist.sort(reverse=True, key= cv2.contourArea)
+
+#this runs through the top 2 max sizes and then will draw an box around them
+for contour in contourslist[0:2]:
+    x, y, w, h = cv2.boundingRect(contour)
+    cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 255), 10)
+
