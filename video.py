@@ -15,8 +15,8 @@ cv2.namedWindow("Frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Frame", width, height)
 cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("mask", width, height)
-# cv2.namedWindow("masked_frame", cv2.WINDOW_NORMAL)
-# cv2.resizeWindow("masked_frame", width, height)
+cv2.namedWindow("masked_frame", cv2.WINDOW_NORMAL)
+cv2.resizeWindow("masked_frame", width, height)
 cv2.namedWindow("new_frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("new_frame", width, height)
 
@@ -37,7 +37,7 @@ while cap.isOpened():
 
         masked_frame = cv2.bitwise_and(frame,frame,mask = b_mask)
 
-        #cv2.imshow("masked_frame", masked_frame)
+        cv2.imshow("masked_frame", masked_frame)
 
 
         # Convert the frame to HSV color space
@@ -65,7 +65,7 @@ while cap.isOpened():
 
         # middle point list
         middlepoint = []
-        print(len(contourslist))
+        #print(len(contourslist))
         #this runs through the top 2 max sizes and then will draw an box around them
         if(len(contourslist) > 1):
             for contour in contourslist[0:2]:
@@ -86,7 +86,7 @@ while cap.isOpened():
         #print("overallmidpoint", overallmidpoint[0][0], overallmidpoint[0][1], overallmidpoint[1][0], overallmidpoint[1][1] )
         ##green line
         newx = cv2.line(frame, (int(middlepoint[0][0]), int(middlepoint[0][1])), (int(overallmidpoint[1][0]), int(overallmidpoint[1][1])), (0,255,0), 4)
-        print(newx)
+        #print(newx)
         ##blue line
         cv2.line(frame, (int(middlepoint[0][0]), int(middlepoint[0][1])), (int(middlepoint[1][0]), int(middlepoint[1][1])), (255,0,0), 10)
 
