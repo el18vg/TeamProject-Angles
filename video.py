@@ -13,19 +13,21 @@ width = 1920
 height = 1080
 cv2.namedWindow("Frame", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Frame", width, height)
-# cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
-# cv2.resizeWindow("mask", width, height)
+cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
+cv2.resizeWindow("mask", width, height)
 # cv2.namedWindow("masked_frame", cv2.WINDOW_NORMAL)
 # cv2.resizeWindow("masked_frame", width, height)
+cv2.namedWindow("new_frame", cv2.WINDOW_NORMAL)
+cv2.resizeWindow("new_frame", width, height)
 
-
+overallmidpoint = []
 while cap.isOpened():
     # Capture frame-by-frame
     ret, frame = cap.read()
 
     # If the frame was read successfully, display it
     if ret:
-
+        cv2.imshow("new_frame", frame)
         # Create a white mask of the same size as the image
         black = np.zeros((frame.shape[0], frame.shape[1], 3), np.uint8) #---black in RGB
 
@@ -49,10 +51,10 @@ while cap.isOpened():
         mask = cv2.inRange(rgb, lower_red, upper_red)
 
         # # Apply morphological opening to remove small objects from the foreground
-        kernel = np.ones((4,4),np.uint8)
+        kernel = np.ones((3,3),np.uint8)
         mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)            
 
-        #cv2.imshow("mask", mask)
+        cv2.imshow("mask", mask)
 
         # # Find contours in the image
         contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -74,10 +76,23 @@ while cap.isOpened():
                 print(x, y , w, h)
                 print(xvalue, yvalue)
                 middlepoint.append([xvalue, yvalue]) 
+                if(len(overallmidpoint) <= 2):
+                     overallmidpoint.append([xvalue, yvalue])
         else:
             continue
         #print(int(middlepoint[1][0]))
+        
+        #print(overallmidpoint)
+        #print("overallmidpoint", overallmidpoint[0][0], overallmidpoint[0][1], overallmidpoint[1][0], overallmidpoint[1][1] )
+        ##green line
+        newx = cv2.line(frame, (int(middlepoint[0][0]), int(middlepoint[0][1])), (int(overallmidpoint[1][0]), int(overallmidpoint[1][1])), (0,255,0), 4)
+        print(newx)
+        ##blue line
         cv2.line(frame, (int(middlepoint[0][0]), int(middlepoint[0][1])), (int(middlepoint[1][0]), int(middlepoint[1][1])), (255,0,0), 10)
+
+        angle = np.arctan(h/w)
+        degrees = np.rad2deg(angle)
+
 
         cv2.imshow("Frame", frame)
 
