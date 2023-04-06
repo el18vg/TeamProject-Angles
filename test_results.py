@@ -34,11 +34,22 @@ while cap.isOpened():
         cv2.namedWindow("masked_frame", cv2.WINDOW_NORMAL)
         cv2.resizeWindow("masked_frame", width, height)
 
+        ## this is to create a black out
+        black = np.zeros((frame.shape[0], frame.shape[1], 3), np.uint8) #---black in RGB
 
+        black1 = cv2.rectangle(black,(430,500),(550,1000),(255, 255, 255), -1)   #---the dimension of the ROI
         
+        if(inputvalue == "2"):
+            black2 = cv2.rectangle(black,(700,50),(900,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "3"):
+            black3 = cv2.rectangle(black,(950,50),(1200,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "4"):
+            black4 = cv2.rectangle(black,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
 
-        
-        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        gray = cv2.cvtColor(black,cv2.COLOR_BGR2GRAY)               #---converting to gray
+        retnew, b_mask = cv2.threshold(gray,127,255, 0)                 #---converting to binary image
+
+        masked_frame = cv2.bitwise_and(frame,frame,mask = b_mask)
 
         #this is the image in grey format
         cv2.imshow("Gray", rgb)
