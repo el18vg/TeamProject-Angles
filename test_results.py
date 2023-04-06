@@ -6,7 +6,8 @@ import numpy as np
 videotitle = "1.-1metre-Lightweight-trim"
 
 # Create a VideoCapture object
-cap = cv2.VideoCapture("C:/Users/USER/OneDrive - University of Leeds/Year 4/MECH5080M -Team Project/Testing/Varun-Videos-Trim/"+videotitle+".mp4")
+# cap = cv2.VideoCapture("C:/Users/USER/OneDrive - University of Leeds/Year 4/MECH5080M -Team Project/Testing/Varun-Videos-Trim/"+videotitle+".mp4")
+cap = cv2.VideoCapture("3.-1.5metre-Lightweight-trim.mp4")
 
 # Check if video is opened successfully
 if not cap.isOpened():
@@ -52,6 +53,8 @@ while cap.isOpened():
         contourslist  = list(contours)
         contourslist.sort(reverse=True, key= cv2.contourArea)
 
+        #print(contourslist)
+    
         middlepoint = []
 
         if(len(contourslist) > 1):
@@ -62,26 +65,12 @@ while cap.isOpened():
                 yvalue = (y+h/2)
                 print(x, y , w, h)
                 print(xvalue, yvalue)
-                print("\n")
                 middlepoint.append([xvalue, yvalue]) 
-                if(len(overallmidpoint) <= 2 and (xvalue <= 520) and (xvalue >= 450) and (yvalue <= 700) and (yvalue >= 600)):
+                if(len(overallmidpoint) <= 2):
                      overallmidpoint.append([xvalue, yvalue])
-                if(len(overallmidpoint) <= 2 and (xvalue <= 820) and (xvalue >= 750) and (yvalue <= 530) and (yvalue >= 480)):
-                     overallmidpoint.append([xvalue, yvalue])
-                
-                #print(overallmidpoint)
-        else:     
+        else:
             continue
-        
 
-        #print(overallmidpoint)
-        # green line
-        newx = cv2.line(frame, (int(middlepoint[0][0]), int(middlepoint[0][1])), (int(overallmidpoint[1][0]), int(overallmidpoint[1][1])), (0,255,0), 4)
-        #print(newx)
-        # blue line
-        cv2.line(frame, (int(middlepoint[0][0]), int(middlepoint[0][1])), (int(middlepoint[1][0]), int(middlepoint[1][1])), (255,0,0), 10)
-
-        #print(middlepoint)
 
         cv2.imshow("Frame", frame)
 
