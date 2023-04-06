@@ -51,8 +51,9 @@ while cap.isOpened():
 
         masked_frame = cv2.bitwise_and(frame,frame,mask = b_mask)
 
-        #this is the image in grey format
-        cv2.imshow("Gray", rgb)
+        cv2.imshow("masked_frame", masked_frame)
+
+        rgb = cv2.cvtColor(masked_frame, cv2.COLOR_BGR2RGB)
 
         # Define the range of red color in HSV
         lower_white = np.array([230, 230, 230])
@@ -72,25 +73,33 @@ while cap.isOpened():
         contourslist  = list(contours)
         contourslist.sort(reverse=True, key= cv2.contourArea)
 
-        #print(contourslist)
-    
+        ## this holds the middle point per frame
         middlepoint = []
 
         if(len(contourslist) > 1):
-            for contour in contourslist[0:4]:
+            for contour in contourslist[0:2]:
                 x, y, w, h = cv2.boundingRect(contour)
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 255), 10)
                 xvalue = (x+w/2)
                 yvalue = (y+h/2)
-                print(x, y , w, h)
-                print(xvalue, yvalue)
+                #print(x, y , w, h)
+                #print(xvalue, yvalue)
+                #print("\n")
                 middlepoint.append([xvalue, yvalue]) 
+                #if(len(overallmidpoint) <= 2 and (xvalue <= 520) and (xvalue >= 450) and (yvalue <= 700) and (yvalue >= 600)):
+                #     overallmidpoint.append([xvalue, yvalue])
                 if(len(overallmidpoint) <= 2):
                      overallmidpoint.append([xvalue, yvalue])
-        else:
+        else:     
             continue
+        
+        # green line
+        cv2.line(frame, (int(overallmidpoint[0][0]), int(overallmidpoint[0][1])), (int(overallmidpoint[1][0]), int(overallmidpoint[1][1])), (0,255,0), 4)
+        # blue line
+        cv2.line(frame, (int(middlepoint[0][0]), int(middlepoint[0][1])), (int(middlepoint[1][0]), int(middlepoint[1][1])), (255,0,0), 10)
 
-
+        #print(middlepoint)
+        cv2.imshow("mask", mask)
         cv2.imshow("Frame", frame)
 
         # Wait for a key press and exit if 'q' is pressed
