@@ -25,6 +25,14 @@ while cap.isOpened():
 
     # If the frame was read successfully, display it
     if ret:
+        width = 1920
+        height = 1080
+        cv2.namedWindow("Frame", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("Frame", width, height)
+        # cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
+        # cv2.resizeWindow("mask", width, height)
+        cv2.namedWindow("masked_frame", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("masked_frame", width, height)
 
 
         
