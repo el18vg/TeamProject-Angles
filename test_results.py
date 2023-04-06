@@ -3,6 +3,7 @@ import numpy as np
 import os
 import re
 
+# this is location of the folder
 dir_path = "C:/Users/fredg/Desktop/Varun-Videos-Trim"
 
 os.chdir(dir_path)
@@ -12,8 +13,9 @@ file_list = os.listdir(dir_path)
 # Filter the file list to include only files with names starting with a number
 numbered_files = [f for f in file_list if re.match(r"^\d+\.-", f)]
 
+# sorting the numbered_files out so it can be seen for the user
 numbered_files = sorted(numbered_files, key=lambda x: int(x.split('.')[0]))
-print(numbered_files)
+#print(numbered_files)
 
 # Print the list of numbered files
 print("Numbered files in the directory:")
@@ -29,7 +31,7 @@ while notnotvalid:
     else:
         notnotvalid = 0
 
-
+# convert the number to int
 desired_number = int(user_input)
 
 # Check if a file with the desired number exists in the directory
@@ -45,11 +47,7 @@ if matching_file:
 else:
     print("No file with the desired number exists.")
 
-#video title
-#videotitle = "1.-1metre-Lightweight-trim"
-
-# Create a VideoCapture object
-# cap = cv2.VideoCapture("C:/Users/USER/OneDrive - University of Leeds/Year 4/MECH5080M -Team Project/Testing/Varun-Videos-Trim/"+videotitle+".mp4")
+# open the video
 cap = cv2.VideoCapture(matching_file)
 
 # Check if video is opened successfully
