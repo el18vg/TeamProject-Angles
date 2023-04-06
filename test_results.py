@@ -21,7 +21,7 @@ numbered_files = sorted(numbered_files, key=lambda x: int(x.split('.')[0]))
 print("Files in the directory:")
 for f in numbered_files:
     print(f)
-print("\n")
+print("")
 # Get user input for the desired number
 notnotvalid = 1
 while notnotvalid:
@@ -30,7 +30,7 @@ while notnotvalid:
         print("This is not correct or Does not exist")
         notnotvalid = 1
     else:
-        print("\n")
+        print("")
         notnotvalid = 0
 
 # convert the number to int
@@ -45,8 +45,8 @@ for f in numbered_files:
         break
 
 if matching_file:
-    print("File with desired number:", matching_file)
-    print("\n")
+    print("Testing File Selected:", matching_file)
+    print("")
 else:
     print("No file with the desired number exists.")
 
