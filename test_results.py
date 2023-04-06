@@ -5,24 +5,26 @@ import re
 
 dir_path = "C:/Users/fredg/Desktop/Varun-Videos-Trim"
 
-
+os.chdir(dir_path)
 # Get a list of files in the directory
 file_list = os.listdir(dir_path)
 
 # Filter the file list to include only files with names starting with a number
 numbered_files = [f for f in file_list if re.match(r"^\d+\.-", f)]
 
+numbered_files = sorted(numbered_files, key=lambda x: int(x.split('.')[0]))
+print(numbered_files)
+
 # Print the list of numbered files
 print("Numbered files in the directory:")
 for f in numbered_files:
     print(f)
-
 # Get user input for the desired number
 notnotvalid = 1
 while notnotvalid:
-    user_input = input("Enter a number between 0 and 21: ")
-    if(int(user_input) not in range(1,22)):
-        print("not correct")
+    user_input = input("Enter The Testing Video Number between 0 and 21: ")
+    if(int(user_input) not in range(1,22) or int(user_input) == 8):
+        print("This is not correct or Does not exist")
         notnotvalid = 1
     else:
         notnotvalid = 0
@@ -42,7 +44,6 @@ if matching_file:
     print("File with desired number:", matching_file)
 else:
     print("No file with the desired number exists.")
-
 
 #video title
 #videotitle = "1.-1metre-Lightweight-trim"
