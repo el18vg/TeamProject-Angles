@@ -13,12 +13,23 @@ cap = cv2.VideoCapture("3.-1.5metre-Lightweight-trim.mp4")
 if not cap.isOpened():
     print("Error opening video file")
 
-# Specify the window size
-width = 1920
-height = 1080
+## set a flag
+notvalid = 1
+print("Enter what section compared")
 
+# wait for the flag to be set false
+# this check is to make sure that the person has entered a proper section
+while notvalid:
+    inputvalue = input()
+    if inputvalue not in ['2','3','4']:
+        print("not valid input")
+        notvalid = 1
+    else:
+        notvalid = 0
 
+## this holds the first position of the sections measured
 overallmidpoint = []
+
 while cap.isOpened():
     # Capture frame-by-frame
     ret, frame = cap.read()
