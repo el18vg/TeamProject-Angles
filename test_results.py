@@ -18,9 +18,10 @@ numbered_files = sorted(numbered_files, key=lambda x: int(x.split('.')[0]))
 #print(numbered_files)
 
 # Print the list of numbered files
-print("Numbered files in the directory:")
+print("Files in the directory:")
 for f in numbered_files:
     print(f)
+print("\n")
 # Get user input for the desired number
 notnotvalid = 1
 while notnotvalid:
@@ -29,6 +30,7 @@ while notnotvalid:
         print("This is not correct or Does not exist")
         notnotvalid = 1
     else:
+        print("\n")
         notnotvalid = 0
 
 # convert the number to int
@@ -44,6 +46,7 @@ for f in numbered_files:
 
 if matching_file:
     print("File with desired number:", matching_file)
+    print("\n")
 else:
     print("No file with the desired number exists.")
 
@@ -56,12 +59,11 @@ if not cap.isOpened():
 
 ## set a flag
 notvalid = 1
-print("Enter what section compared")
 
 # wait for the flag to be set false
 # this check is to make sure that the person has entered a proper section
 while notvalid:
-    inputvalue = input()
+    inputvalue = input("Enter what section compared: ")
     if inputvalue not in ['2','3','4']:
         print("not valid input")
         notvalid = 1
