@@ -21,7 +21,6 @@ This contains the Python files that can be used for this project.
 - Run the executable ```test-results.exe```.
 - The video files should show up.
 
-##
 
 ## How to use the system
 -   First enter the Test Number.
