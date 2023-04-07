@@ -212,10 +212,21 @@ while cap.isOpened():
 
         redlinesize = math.sqrt((overallmidpoint[1][0] - sectionmiddlepoint[0][0])**2 + (overallmidpoint[1][1] - sectionmiddlepoint[0][1])**2)
 
-        print(overallmidpoint)
-        print(sectionmiddlepoint)
-        print(redlinesize)
-        print("")
+        ## angle stuff
+
+        print("blueline: "+ str(bluelinesize))
+        print("greenline:"+ str(greenlinesize))
+        print("redline: "+ str(redlinesize))
+        #
+        if redlinesize > 1:
+            angle = math.acos(-(((redlinesize**2) - (bluelinesize**2) - (greenlinesize**2))/(2*bluelinesize*greenlinesize)))
+            angleindeg = math.degrees(angle)
+            print("angle: " + str(angleindeg))
+        #print("")
+        # print(overallmidpoint)
+        # print(sectionmiddlepoint)
+        # print(redlinesize)
+        # print("")
         #print(middlepoint)
         cv2.imshow("mask", mask)
         cv2.imshow("Frame", frame)
