@@ -98,14 +98,52 @@ def defaultvalues():
     kernel = np.ones((5,5),np.uint8)
     return lower_white, upper_white, kernel
 
-def sectionchoice(inputvalue):
-    if(inputvalue == "2"):
-            blacksection = cv2.rectangle(blackpoint,(700,50),(900,1000),(255, 255, 255), -1)   #---the dimension of the ROI
-    if(inputvalue == "3"):
-            blacksection = cv2.rectangle(blackpoint,(950,50),(1200,1000),(255, 255, 255), -1)   #---the dimension of the ROI
-    if(inputvalue == "4"):
-            blacksection = cv2.rectangle(blackpoint,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
-    return blacksection
+def sectionchoice(inputvalue, filevalue):
+    # for the testing video 6
+    if filevalue in [6]:
+        black1 = cv2.rectangle(refblack,(400,500),(500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "2"):
+                blacksection = cv2.rectangle(blackpoint,(680,50),(850,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "3"):
+                blacksection = cv2.rectangle(blackpoint,(900,50),(1150,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "4"):
+                blacksection = cv2.rectangle(blackpoint,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+    ## for the testing video 7
+    elif filevalue in [7, 10, 11, 18, 19, 20, 21]:
+        black1 = cv2.rectangle(refblack,(560,500),(670,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "2"):
+                blacksection = cv2.rectangle(blackpoint,(830,50),(1000,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "3"):
+                blacksection = cv2.rectangle(blackpoint,(1050,50),(1300,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "4"):
+                blacksection = cv2.rectangle(blackpoint,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+    # for the testign video 12
+    elif filevalue in [12, 13, 14, 15]:
+        black1 = cv2.rectangle(refblack,(530,500),(640,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "2"):
+                blacksection = cv2.rectangle(blackpoint,(790,50),(960,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "3"):
+                blacksection = cv2.rectangle(blackpoint,(950,50),(1250,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "4"):
+                blacksection = cv2.rectangle(blackpoint,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+    # for the testing video 17
+    elif filevalue in [16, 17]:
+        black1 = cv2.rectangle(refblack,(530,500),(640,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "2"):
+                blacksection = cv2.rectangle(blackpoint,(790,50),(960,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "3"):
+                blacksection = cv2.rectangle(blackpoint,(1000,50),(1250,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "4"):
+                blacksection = cv2.rectangle(blackpoint,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+    else:
+        black1 = cv2.rectangle(refblack,(430,500),(550,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "2"):
+                blacksection = cv2.rectangle(blackpoint,(700,50),(900,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "3"):
+                blacksection = cv2.rectangle(blackpoint,(950,50),(1200,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        if(inputvalue == "4"):
+                blacksection = cv2.rectangle(blackpoint,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+    return blacksection, black1
 
 
 
@@ -129,9 +167,8 @@ while cap.isOpened():
         refblack = np.zeros((frame.shape[0], frame.shape[1], 3), np.uint8) #---black in RGB
         blackpoint = np.zeros((frame.shape[0], frame.shape[1], 3), np.uint8) #---black in RGB
 
-        black1 = cv2.rectangle(refblack,(430,500),(550,1000),(255, 255, 255), -1)   #---the dimension of the ROI
         
-        blacksection = sectionchoice(inputvalue)
+        blacksection, black1 = sectionchoice(inputvalue, desired_number)
 
         # for the reference
         gray = cv2.cvtColor(refblack,cv2.COLOR_BGR2GRAY)               #---converting to gray
@@ -223,22 +260,22 @@ while cap.isOpened():
 
         redlinesize = math.sqrt((overallmidpoint[1][0] - sectionmiddlepoint[0][0])**2 + (overallmidpoint[1][1] - sectionmiddlepoint[0][1])**2)
 
-        ## angle stuff
+        # ## angle stuff
 
-        print("blueline: "+ str(bluelinesize))
-        print("greenline:"+ str(greenlinesize))
-        print("redline: "+ str(redlinesize))
-        #
+        # print("blueline: "+ str(bluelinesize))
+        # print("greenline:"+ str(greenlinesize))
+        # print("redline: "+ str(redlinesize))
+        # #
         if redlinesize > 1:
             angle = math.acos(-(((redlinesize**2) - (bluelinesize**2) - (greenlinesize**2))/(2*bluelinesize*greenlinesize)))
             angleindeg = math.degrees(angle)
             print("angle: " + str(angleindeg))
-        #print("")
+        # print("")
         # print(overallmidpoint)
         # print(sectionmiddlepoint)
         # print(redlinesize)
         # print("")
-        #print(middlepoint)
+        # print(middlepoint)
         cv2.imshow("mask", mask)
         cv2.imshow("Frame", frame)
 
