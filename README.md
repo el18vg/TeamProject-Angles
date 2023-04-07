@@ -28,6 +28,8 @@ This contains the Python files that can be used for this project.
 -   Second enter the section Number.
 -   Press any key to move to the next frame.
 -   Press ```q``` if you want to close it down.
+-   For the video selection the options are between 1-21 excluding 8.
+-   For the section the options are between 2 and 3.
 
 
 ## FAQ
