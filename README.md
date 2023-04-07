@@ -14,7 +14,7 @@ This contains the Python files that can be used for this project.
 
 ## Instructions
 
-- Download this code,click the green button and download zip
+- Download this code, click the green button and download zip
 - Navigate to the ```dist``` folder.
 - Open the project folder ```test-results```
 - Locate the ```filepath.txt``` file in this folder.
