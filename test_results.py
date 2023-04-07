@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 import re
+import math
 
 # this is location of the folder
 dir_path = "C:/Users/fredg/Desktop/Varun-Videos-Trim"
@@ -193,16 +194,28 @@ while cap.isOpened():
 
         mask = cv2.bitwise_or(refmask,sectionmask)
 
-        # print(middlepoint)
-        #print(overallmidpoint[0][0])
-        #print(sectionmiddlepoint)
-        #print("")
-        #print(refmiddlepoint)
         # # green line
         cv2.line(frame, (int(overallmidpoint[0][0]), int(overallmidpoint[0][1])), (int(overallmidpoint[1][0]), int(overallmidpoint[1][1])), (0,255,0), 4)
+        
+        greenlinesize = math.sqrt((overallmidpoint[1][0]-overallmidpoint[0][0])**2 + (overallmidpoint[1][1] - overallmidpoint[0][1])**2)
+        
+        #print(overallmidpoint)
+        #print(greenlinesize)
+        
         # # blue line
         cv2.line(frame, (int(refmiddlepoint[0][0]), int(refmiddlepoint[0][1])), (int(sectionmiddlepoint[0][0]), int(sectionmiddlepoint[0][1])), (255,0,0), 10)
 
+        bluelinesize = math.sqrt((sectionmiddlepoint[0][0]-refmiddlepoint[0][0])**2 + (sectionmiddlepoint[0][1] - refmiddlepoint[0][1]) **2)
+
+        ## red line
+        cv2.line(frame, (int(overallmidpoint[1][0]),int(overallmidpoint[1][1])), (int(sectionmiddlepoint[0][0]),int(sectionmiddlepoint[0][1])), (0,0,255), 5)
+
+        redlinesize = math.sqrt((overallmidpoint[1][0] - sectionmiddlepoint[0][0])**2 + (overallmidpoint[1][1] - sectionmiddlepoint[0][1])**2)
+
+        print(overallmidpoint)
+        print(sectionmiddlepoint)
+        print(redlinesize)
+        print("")
         #print(middlepoint)
         cv2.imshow("mask", mask)
         cv2.imshow("Frame", frame)
