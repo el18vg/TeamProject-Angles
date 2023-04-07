@@ -73,39 +73,48 @@ while notvalid:
 ## this holds the first position of the sections measured
 overallmidpoint = []
 
+
+
+
 while cap.isOpened():
     # Capture frame-by-frame
     ret, frame = cap.read()
 
     # If the frame was read successfully, display it
     if ret:
+        # holds the ref middlepoint
+        refmiddlepoint = []
+
+        # holds the section middlepoint
+        sectionmiddlepoint = []
+
         width = 1920
         height = 1080
         cv2.namedWindow("Frame", cv2.WINDOW_NORMAL)
         cv2.resizeWindow("Frame", width, height)
-        # cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
-        # cv2.resizeWindow("mask", width, height)
+        cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("mask", width, height)
         cv2.namedWindow("masked_frame", cv2.WINDOW_NORMAL)
         cv2.resizeWindow("masked_frame", width, height)
 
         ## this is to create a black out
-        black = np.zeros((frame.shape[0], frame.shape[1], 3), np.uint8) #---black in RGB
+        refblack = np.zeros((frame.shape[0], frame.shape[1], 3), np.uint8) #---black in RGB
+        blackpoint = np.zeros((frame.shape[0], frame.shape[1], 3), np.uint8) #---black in RGB
 
-        black1 = cv2.rectangle(black,(430,500),(550,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        black1 = cv2.rectangle(refblack,(430,500),(550,1000),(255, 255, 255), -1)   #---the dimension of the ROI
         
         if(inputvalue == "2"):
-            black2 = cv2.rectangle(black,(700,50),(900,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+            black2 = cv2.rectangle(blackpoint,(700,50),(900,1000),(255, 255, 255), -1)   #---the dimension of the ROI
         if(inputvalue == "3"):
-            black3 = cv2.rectangle(black,(950,50),(1200,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+            black3 = cv2.rectangle(blackpoint,(950,50),(1200,1000),(255, 255, 255), -1)   #---the dimension of the ROI
         if(inputvalue == "4"):
-            black4 = cv2.rectangle(black,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+            black4 = cv2.rectangle(blackpoint,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
 
-        gray = cv2.cvtColor(black,cv2.COLOR_BGR2GRAY)               #---converting to gray
+        # for the reference
+        gray = cv2.cvtColor(refblack,cv2.COLOR_BGR2GRAY)               #---converting to gray
         retnew, b_mask = cv2.threshold(gray,127,255, 0)                 #---converting to binary image
 
         masked_frame = cv2.bitwise_and(frame,frame,mask = b_mask)
-
-        cv2.imshow("masked_frame", masked_frame)
 
         rgb = cv2.cvtColor(masked_frame, cv2.COLOR_BGR2RGB)
 
@@ -114,43 +123,85 @@ while cap.isOpened():
         upper_white = np.array([255, 255, 255])
 
         # Threshold the rgb image to get only red colors
-        mask = cv2.inRange(rgb, lower_white, upper_white)
+        refmask = cv2.inRange(rgb, lower_white, upper_white)
 
         # # Apply morphological opening to remove small objects from the foreground
-        kernel = np.ones((3,3),np.uint8)
-        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)      
+        kernel = np.ones((5,5),np.uint8)
+        refmask = cv2.morphologyEx(refmask, cv2.MORPH_OPEN, kernel)      
 
         # # Find contours in the image
-        contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        refcontours, hierarchy = cv2.findContours(refmask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # convert the object tuple into a string
-        contourslist  = list(contours)
-        contourslist.sort(reverse=True, key= cv2.contourArea)
+        refcontourslist  = list(refcontours)
+        refcontourslist.sort(reverse=True, key= cv2.contourArea)
+        #print(refcontourslist)
 
-        ## this holds the middle point per frame
-        middlepoint = []
-
-        if(len(contourslist) > 1):
-            for contour in contourslist[0:2]:
+        if(len(refcontourslist) > 0):
+            for contour in refcontourslist[0:1]:
                 x, y, w, h = cv2.boundingRect(contour)
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 255), 10)
-                xvalue = (x+w/2)
-                yvalue = (y+h/2)
-                #print(x, y , w, h)
-                #print(xvalue, yvalue)
-                #print("\n")
-                middlepoint.append([xvalue, yvalue]) 
-                #if(len(overallmidpoint) <= 2 and (xvalue <= 520) and (xvalue >= 450) and (yvalue <= 700) and (yvalue >= 600)):
-                #     overallmidpoint.append([xvalue, yvalue])
-                if(len(overallmidpoint) <= 2):
-                     overallmidpoint.append([xvalue, yvalue])
-        else:     
-            continue
-        
-        # green line
+                ## this holds the middle point per frame
+                refxvalue = (x+w/2)
+                refyvalue = (y+h/2)
+                refmiddlepoint.append([refxvalue, refyvalue]) 
+                if (len(overallmidpoint) <= 2):
+                    overallmidpoint.append([refxvalue, refyvalue])
+        #####################################################################################################
+
+        # for the section
+        gray2 = cv2.cvtColor(blackpoint,cv2.COLOR_BGR2GRAY)               #---converting to gray
+        retnew, b_mask2 = cv2.threshold(gray2,127,255, 0)                 #---converting to binary image
+
+        masked_frame2 = cv2.bitwise_and(frame,frame,mask = b_mask2)
+
+        rgb2 = cv2.cvtColor(masked_frame2, cv2.COLOR_BGR2RGB)
+
+        # Define the range of red color in HSV
+        lower_white = np.array([230, 230, 230])
+        upper_white = np.array([255, 255, 255])
+
+        # Threshold the rgb image to get only red colors
+        sectionmask = cv2.inRange(rgb2, lower_white, upper_white)
+
+        # # Apply morphological opening to remove small objects from the foreground
+        kernel = np.ones((5,5),np.uint8)
+        sectionmask = cv2.morphologyEx(sectionmask, cv2.MORPH_OPEN, kernel)      
+
+        # # Find contours in the image
+        sectioncontours, hierarchy = cv2.findContours(sectionmask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # convert the object tuple into a string
+        sectioncontourslist  = list(sectioncontours)
+        sectioncontourslist.sort(reverse=True, key= cv2.contourArea)
+
+        if(len(sectioncontourslist) > 0):
+            for contour in sectioncontourslist[0:1]:
+                x, y, w, h = cv2.boundingRect(contour)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 255), 10)
+                ## this holds the middle point per frame
+                sectionxvalue = (x+w/2)
+                sectionyvalue = (y+h/2)
+                sectionmiddlepoint.append([sectionxvalue, sectionyvalue]) 
+                if (len(overallmidpoint) <=2):
+                    overallmidpoint.append([sectionxvalue, sectionyvalue])
+
+        #####################################################################################
+
+        newframe = cv2.bitwise_or(masked_frame, masked_frame2)
+        cv2.imshow("masked_frame", newframe)
+
+        mask = cv2.bitwise_or(refmask,sectionmask)
+
+        # print(middlepoint)
+        #print(overallmidpoint[0][0])
+        #print(sectionmiddlepoint)
+        #print("")
+        #print(refmiddlepoint)
+        # # green line
         cv2.line(frame, (int(overallmidpoint[0][0]), int(overallmidpoint[0][1])), (int(overallmidpoint[1][0]), int(overallmidpoint[1][1])), (0,255,0), 4)
-        # blue line
-        cv2.line(frame, (int(middlepoint[0][0]), int(middlepoint[0][1])), (int(middlepoint[1][0]), int(middlepoint[1][1])), (255,0,0), 10)
+        # # blue line
+        cv2.line(frame, (int(refmiddlepoint[0][0]), int(refmiddlepoint[0][1])), (int(sectionmiddlepoint[0][0]), int(sectionmiddlepoint[0][1])), (255,0,0), 10)
 
         #print(middlepoint)
         cv2.imshow("mask", mask)
