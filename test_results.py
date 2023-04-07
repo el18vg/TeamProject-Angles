@@ -74,8 +74,42 @@ while notvalid:
 ## this holds the first position of the sections measured
 overallmidpoint = []
 
+def setup():
+    width = 1920
+    height = 1080
+    cv2.namedWindow("Frame", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("Frame", width, height)
+    cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("mask", width, height)
+    cv2.namedWindow("masked_frame", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("masked_frame", width, height)
+
+    
+    print("Setup Complete \n")
+    return
 
 
+def defaultvalues():
+    # Define the range of red color in HSV
+    lower_white = np.array([230, 230, 230])
+    upper_white = np.array([255, 255, 255])
+
+    # # Apply morphological opening to remove small objects from the foreground
+    kernel = np.ones((5,5),np.uint8)
+    return lower_white, upper_white, kernel
+
+def sectionchoice(inputvalue):
+    if(inputvalue == "2"):
+            blacksection = cv2.rectangle(blackpoint,(700,50),(900,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+    if(inputvalue == "3"):
+            blacksection = cv2.rectangle(blackpoint,(950,50),(1200,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+    if(inputvalue == "4"):
+            blacksection = cv2.rectangle(blackpoint,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+    return blacksection
+
+
+
+setup()
 
 while cap.isOpened():
     # Capture frame-by-frame
@@ -89,27 +123,15 @@ while cap.isOpened():
         # holds the section middlepoint
         sectionmiddlepoint = []
 
-        width = 1920
-        height = 1080
-        cv2.namedWindow("Frame", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("Frame", width, height)
-        cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("mask", width, height)
-        cv2.namedWindow("masked_frame", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("masked_frame", width, height)
-
+        lower_white, upper_white, kernel = defaultvalues()
+        
         ## this is to create a black out
         refblack = np.zeros((frame.shape[0], frame.shape[1], 3), np.uint8) #---black in RGB
         blackpoint = np.zeros((frame.shape[0], frame.shape[1], 3), np.uint8) #---black in RGB
 
         black1 = cv2.rectangle(refblack,(430,500),(550,1000),(255, 255, 255), -1)   #---the dimension of the ROI
         
-        if(inputvalue == "2"):
-            black2 = cv2.rectangle(blackpoint,(700,50),(900,1000),(255, 255, 255), -1)   #---the dimension of the ROI
-        if(inputvalue == "3"):
-            black3 = cv2.rectangle(blackpoint,(950,50),(1200,1000),(255, 255, 255), -1)   #---the dimension of the ROI
-        if(inputvalue == "4"):
-            black4 = cv2.rectangle(blackpoint,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
+        blacksection = sectionchoice(inputvalue)
 
         # for the reference
         gray = cv2.cvtColor(refblack,cv2.COLOR_BGR2GRAY)               #---converting to gray
@@ -119,15 +141,9 @@ while cap.isOpened():
 
         rgb = cv2.cvtColor(masked_frame, cv2.COLOR_BGR2RGB)
 
-        # Define the range of red color in HSV
-        lower_white = np.array([230, 230, 230])
-        upper_white = np.array([255, 255, 255])
-
         # Threshold the rgb image to get only red colors
         refmask = cv2.inRange(rgb, lower_white, upper_white)
-
-        # # Apply morphological opening to remove small objects from the foreground
-        kernel = np.ones((5,5),np.uint8)
+        
         refmask = cv2.morphologyEx(refmask, cv2.MORPH_OPEN, kernel)      
 
         # # Find contours in the image
@@ -158,15 +174,10 @@ while cap.isOpened():
 
         rgb2 = cv2.cvtColor(masked_frame2, cv2.COLOR_BGR2RGB)
 
-        # Define the range of red color in HSV
-        lower_white = np.array([230, 230, 230])
-        upper_white = np.array([255, 255, 255])
-
         # Threshold the rgb image to get only red colors
         sectionmask = cv2.inRange(rgb2, lower_white, upper_white)
 
         # # Apply morphological opening to remove small objects from the foreground
-        kernel = np.ones((5,5),np.uint8)
         sectionmask = cv2.morphologyEx(sectionmask, cv2.MORPH_OPEN, kernel)      
 
         # # Find contours in the image
