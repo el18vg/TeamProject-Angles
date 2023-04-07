@@ -4,8 +4,13 @@ import os
 import re
 import math
 
+filedir = open("filepath.txt","r")
+
+first_line = filedir.readline()
+#print(first_line)
+
 # this is location of the folder
-dir_path = "C:/Users/fredg/Desktop/Varun-Videos-Trim"
+dir_path = first_line
 
 os.chdir(dir_path)
 # Get a list of files in the directory
