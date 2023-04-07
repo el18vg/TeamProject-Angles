@@ -79,10 +79,12 @@ def setup():
     height = 1080
     cv2.namedWindow("Frame", cv2.WINDOW_NORMAL)
     cv2.resizeWindow("Frame", width, height)
-    cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("mask", width, height)
-    cv2.namedWindow("masked_frame", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("masked_frame", width, height)
+    # cv2.namedWindow("mask", cv2.WINDOW_NORMAL)
+    # cv2.resizeWindow("mask", width, height)
+    # cv2.namedWindow("masked_frame", cv2.WINDOW_NORMAL)
+    # cv2.resizeWindow("masked_frame", width, height)
+    # Set the window to full screen mode
+    cv2.setWindowProperty("Frame", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
     
     print("Setup Complete \n")
@@ -145,8 +147,7 @@ def sectionchoice(inputvalue, filevalue):
                 blacksection = cv2.rectangle(blackpoint,(1090,50),(1500,1000),(255, 255, 255), -1)   #---the dimension of the ROI
     return blacksection, black1
 
-
-
+# setup the system 
 setup()
 
 while cap.isOpened():
@@ -238,7 +239,7 @@ while cap.isOpened():
         #####################################################################################
 
         newframe = cv2.bitwise_or(masked_frame, masked_frame2)
-        cv2.imshow("masked_frame", newframe)
+        #cv2.imshow("masked_frame", newframe)
 
         mask = cv2.bitwise_or(refmask,sectionmask)
 
@@ -269,14 +270,53 @@ while cap.isOpened():
         if redlinesize > 1:
             angle = math.acos(-(((redlinesize**2) - (bluelinesize**2) - (greenlinesize**2))/(2*bluelinesize*greenlinesize)))
             angleindeg = math.degrees(angle)
-            print("angle: " + str(angleindeg))
+            #print("angle: " + str(angleindeg))
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            font_scale = 2
+            font_thickness = 4
+            text_color = (0, 0, 0)  # white
+
+            text = "Angle: %.3f Degrees" %angleindeg
+            text_size, _ = cv2.getTextSize(text, font, font_scale, font_thickness)
+            text_width, text_height = text_size
+            text_x = 10
+            text_y = 200
+            titletext = "Test: " + str(desired_number) + " Section: " + str(inputvalue)
+            text_size, _ = cv2.getTextSize(titletext, font, font_scale, font_thickness)
+
+            cv2.rectangle(frame, (5,20),(730,250),(255, 255, 255), -1)
+            cv2.putText(frame, titletext, (text_x, text_y-100), font, font_scale, text_color, font_thickness)
+
+            cv2.putText(frame, text, (text_x, text_y), font, font_scale, text_color, font_thickness)
+        else:
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            font_scale = 2
+            font_thickness = 4
+            text_color = (0, 0, 0)  # white
+            text = "Angle: 0 Degrees"
+            text_size, _ = cv2.getTextSize(text, font, font_scale, font_thickness)
+            text_width, text_height = text_size
+            text_x = 10
+            text_y = 200
+            titletext = "Test: " + str(desired_number) + " Section: " + str(inputvalue)
+            text_size, _ = cv2.getTextSize(titletext, font, font_scale, font_thickness)
+
+            cv2.rectangle(frame, (5,20),(730,250),(255, 255, 255), -1)
+            cv2.putText(frame, titletext, (text_x, text_y-100), font, font_scale, text_color, font_thickness)
+
+            cv2.putText(frame, text, (text_x, text_y), font, font_scale, text_color, font_thickness)
+             
         # print("")
         # print(overallmidpoint)
         # print(sectionmiddlepoint)
         # print(redlinesize)
         # print("")
         # print(middlepoint)
-        cv2.imshow("mask", mask)
+
+        # Define the text properties
+        
+
+        #cv2.imshow("mask", mask)
         cv2.imshow("Frame", frame)
 
         # Wait for a key press and exit if 'q' is pressed
