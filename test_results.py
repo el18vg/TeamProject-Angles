@@ -95,7 +95,8 @@ def setup():
     #cv2.setWindowProperty("Frame", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
     os.chdir(currentdir)
-    filename = "timestamp.csv"
+    #os.chdir()
+    filename = "1.angletimedata/timestamp.csv"
     # checking if file exists
     if os.path.exists(filename):
         #append_write = 'a' # append if already exists
