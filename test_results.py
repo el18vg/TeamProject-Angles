@@ -9,6 +9,9 @@ filedir = open("filepath.txt","r")
 first_line = filedir.readline()
 #print(first_line)
 
+#getting the current directory need this for the textfiles
+currentdir = os.getcwd()
+
 # this is location of the folder
 dir_path = first_line
 
@@ -24,7 +27,7 @@ numbered_files = sorted(numbered_files, key=lambda x: int(x.split('.')[0]))
 #print(numbered_files)
 
 # Print the list of numbered files
-print("Files in the directory:")
+print("Files in the Directory:")
 for f in numbered_files:
     print(f)
 print("")
@@ -89,12 +92,35 @@ def setup():
     # cv2.namedWindow("masked_frame", cv2.WINDOW_NORMAL)
     # cv2.resizeWindow("masked_frame", width, height)
     # Set the window to full screen mode
-    cv2.setWindowProperty("Frame", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+    #cv2.setWindowProperty("Frame", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-    
+    os.chdir(currentdir)
+    filename = "timestamp.csv"
+    # checking if file exists
+    if os.path.exists(filename):
+        #append_write = 'a' # append if already exists
+        os.remove(filename)
+        
+    #else:
+        #append_write = 'w' # make a new file if not
+    append_write = 'w'
+    # open file
+    file = open(filename,append_write)
+
+    #writing data to file
+    if (append_write == "w"):
+        file.write("TimeStamp,FrameCount,Angle\n")
+
     print("Setup Complete \n")
     return
 
+def writingtofile(timesecond, currentframecount, angles):
+    os.chdir(currentdir)
+    with open('timestamp.csv', 'a') as timefile:
+    #first_line = framefile.readline()
+        timefile.write(str(timesecond)+ "," + str(currentframecount) + "," + str(angles) + "\n")
+        print("Timestamp:" + str(timesecond)+ ", Current Frame Count:" + str(currentframecount) + ", Angle:" + str(angles))
+    return
 
 def defaultvalues():
     # Define the range of red color in HSV
@@ -155,12 +181,33 @@ def sectionchoice(inputvalue, filevalue):
 # setup the system 
 setup()
 
+num_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+print(num_frames)
+
+
+slow_motion_fps = 240
+content_duration = 1  # seconds
+effective_fps =    slow_motion_fps /content_duration
+
 while cap.isOpened():
     # Capture frame-by-frame
     ret, frame = cap.read()
 
+
+    #print(len(frame))
     # If the frame was read successfully, display it
     if ret:
+        
+
+        # Get the current frame number
+        current_frame = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
+
+        # Calculate real-time millisecond timestamp
+        real_time_ms = int((current_frame / effective_fps) * 1000)
+
+        # Print the real-time millisecond timestamp
+        #print("Real-time Millisecond Timestamp: ", real_time_ms)
+
         # holds the ref middlepoint
         refmiddlepoint = []
 
@@ -293,6 +340,8 @@ while cap.isOpened():
             cv2.putText(frame, titletext, (text_x, text_y-100), font, font_scale, text_color, font_thickness)
 
             cv2.putText(frame, text, (text_x, text_y), font, font_scale, text_color, font_thickness)
+
+            writingtofile(real_time_ms, current_frame, angleindeg)
         else:
             font = cv2.FONT_HERSHEY_SIMPLEX
             font_scale = 2
@@ -305,12 +354,13 @@ while cap.isOpened():
             text_y = 200
             titletext = "Test: " + str(desired_number) + " Section: " + str(inputvalue)
             text_size, _ = cv2.getTextSize(titletext, font, font_scale, font_thickness)
-
+            angleindeg = 0
             cv2.rectangle(frame, (5,20),(730,250),(255, 255, 255), -1)
             cv2.putText(frame, titletext, (text_x, text_y-100), font, font_scale, text_color, font_thickness)
 
             cv2.putText(frame, text, (text_x, text_y), font, font_scale, text_color, font_thickness)
-             
+            writingtofile(real_time_ms, current_frame, angleindeg)
+
         # print("")
         # print(overallmidpoint)
         # print(sectionmiddlepoint)
