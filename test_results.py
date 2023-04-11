@@ -4,7 +4,7 @@ import os
 import re
 import math
 
-filedir = open("filepath.txt","r")
+filedir = open("1.angletimedata/filepath.txt","r")
 
 first_line = filedir.readline()
 #print(first_line)
