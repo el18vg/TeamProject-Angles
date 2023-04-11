@@ -117,7 +117,8 @@ def setup():
 
 def writingtofile(timesecond, currentframecount, angles):
     os.chdir(currentdir)
-    with open('timestamp.csv', 'a') as timefile:
+    filename = "1.angletimedata/timestamp.csv"
+    with open(filename, 'a') as timefile:
     #first_line = framefile.readline()
         timefile.write(str(timesecond)+ "," + str(currentframecount) + "," + str(angles) + "\n")
         print("Timestamp:" + str(timesecond)+ ", Current Frame Count:" + str(currentframecount) + ", Angle:" + str(angles))
