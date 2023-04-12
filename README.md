@@ -58,12 +58,13 @@ Click the Address Bar and copy this
 
 ### Setting up the File Path txt
 
-Open the folder with the code under the project folder under dist
+Open the folder with the code under the project folder under ```dist```, open the folder ```1.1.angletimedata```
 
-![filepathimage](https://i.imgur.com/QeGlFod.png)
+![filepathimage](https://i.imgur.com/EoqonTS.png)
 
 
-Open this file and paste it in your copied file directory.
+Open this file and paste it in your copied file directory. There is a folder called ```1.1.angletimedata```, in this folder you will find both
+the filepath file for the video and also the place where you get the output of the video file, which produces the angle, timestamp and the frame count.
 **Make sure you Save This File**
 
 ![filepathinsideimage](https://i.imgur.com/gkoPsS0.png)
