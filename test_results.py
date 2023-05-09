@@ -377,7 +377,7 @@ while cap.isOpened():
         cv2.imshow("Frame", frame)
 
         # Wait for a key press and exit if 'q' is pressed
-        key = cv2.waitKey(0)
+        key = cv2.waitKey(1)
         if key & 0xFF == ord('q'):
             break
     else:
