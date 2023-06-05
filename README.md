@@ -15,8 +15,7 @@ This contains the Python files that can be used for this project.
 ## Instructions
 
 - Download this code, click the green button and download zip
-- Navigate to the ```dist``` folder.
-- Open the project folder ```test-results```
+- Navigate to the ```1.angletimedata``` folder.
 - Locate the ```filepath.txt``` file in this folder.
 - Replace the top line with the directory of where the videos are stored. See the example below on how to get it in the FAQ
 - Run the executable ```test-results.exe```.
